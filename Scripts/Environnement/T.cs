@@ -6,12 +6,9 @@ public class T : MonoBehaviour
 {
 	public float speed;
 
-	public GameObject m_target;
+	private GameObject m_target;
 	Vector3 m_Last_p = Vector3.zero;
 	Quaternion m_lookAtRotation;
-
-	public float range = 15.0f;
-    public string enemyTag = "Chumpa";
 
 	public float FireRate;
 	private float FireRate_p;
@@ -34,7 +31,7 @@ public class T : MonoBehaviour
         	
 
         		if(FireRate_p >= FireRate){
-        			Shoot();
+        			Shoot(m_target);
         		}
 
 
@@ -51,25 +48,39 @@ public class T : MonoBehaviour
         }
     }
 
-    public bool SetTarget(GameObject target){
+/*    public bool SetTarget(GameObject target){
     	m_target = target;
 
     	return true;
     }
-
+*/
     void OnTriggerEnter(Collider other){
     	if(other.gameObject.CompareTag("Chumpa")){
+    		m_target = other.gameObject;
         	Debug.Log("ok");
+        	Shoot(other.gameObject);
         }
+
+
     }
 
-    void Shoot(){
+    void Shoot(GameObject Chumpa_o){
     	GameObject BulletPrefab_o = Instantiate (BulletPrefab, BulletSpawn.position, BulletSpawn.rotation) as GameObject;
     	FireRate_p = 0;
 
+
+    	BulletPrefab_o.GetComponent<Bullet>().C_Target = Chumpa_o;
         //BulletPrefab_o.GetComponent<Rigidbody>().velocity = BulletPrefab_o.transform.forward * 6;
 
         //Bullet Bullet = BulletPrefab_o.GetComponent<Bullet>();
     }
-    
+
+/*
+    GameObject Closest_Chumpa(string Chumpa){
+    	Vector3 position = transform.position;
+    	retrun GameObject.FindGameObjectsWithTag(Chumpa);
+    		.OrderBy(0 => (o.transform.position - position).srqMagnitude)
+    		.FistOrDefault();
+    }
+    */
 }
